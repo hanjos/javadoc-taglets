@@ -40,8 +40,18 @@
               <goal>jar</goal>
             </goals>
           </execution>
+          <execution>
+            <id>generate-javadocs</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>javadoc</goal>
+            </goals>
+          </execution>
         </executions>
         <configuration>
+          <!-- for publish-scm to publish the desired structure -->
+          <outputDirectory>${project.build.directory}/apidocs/docs/${project.version}</outputDirectory>
+          <reportOutputDirectory>${project.reporting.outputDirectory}/apidocs/docs/${project.version}</reportOutputDirectory>
           <detectJavaApiLink>true</detectJavaApiLink>
           <detectLinks>true</detectLinks>
           <detectOfflineLinks>true</detectOfflineLinks>
@@ -66,33 +76,31 @@
         </configuration>
       </plugin>
 
-      <!-- Uploading Javadocs to GitHub -->
+      <!-- Uploading Javadocs to GitHub, at site-deploy time -->
       <plugin>
-        <groupId>com.github.github</groupId>
-        <artifactId>site-maven-plugin</artifactId>
-        <version>0.9</version>
-        <configuration>
-          <message>Creating site for ${project.version}</message>
-        </configuration>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-scm-publish-plugin</artifactId>
+        <version>1.1</version>
         <executions>
           <execution>
-            <goals>
-              <goal>site</goal>
-            </goals>
-            <!-- select the Maven phase in which the plugin will be executed -->
             <phase>site-deploy</phase>
-            <configuration>
-              <!-- The commit message -->
-              <message>Docs for ${project.artifactId}:${project.version}</message>
-
-              <!-- The location where the site is uploaded -->
-              <path>${project.version}</path>
-
-              <!-- Use merge to override the content -->
-              <merge>true</merge>
-            </configuration>
+            <goals>
+              <goal>publish-scm</goal>
+            </goals>
           </execution>
         </executions>
+        <configuration>
+          <checkoutDirectory>${project.build.directory}/scmpublish
+          </checkoutDirectory>
+          <checkinComment>Publishing javadoc for
+            ${project.artifactId}:${project.version}
+          </checkinComment>
+          <content>${project.reporting.outputDirectory}/apidocs</content>
+          <skipDeletedFiles>true</skipDeletedFiles>
+          <serverId>github</serverId>
+          <pubScmUrl>scm:git:https://github.com/hanjos/javadoc-taglets.git</pubScmUrl>
+          <scmBranch>gh-pages</scmBranch> <!-- branch with static site -->
+        </configuration>
       </plugin>
 
       <!-- Needs to be disabled for the GitHub Site plugin to work -->
