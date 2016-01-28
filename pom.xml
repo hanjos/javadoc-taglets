@@ -8,9 +8,12 @@
   <artifactId>taglets</artifactId>
   <version>1.0-SNAPSHOT</version>
 
+  <url>https://github.com/hanjos/javadoc-taglets</url>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jdk.version>1.7</jdk.version>
+    <github.global.server>github</github.global.server>
   </properties>
 
   <build>
@@ -48,7 +51,8 @@
 
           <!-- Doclet links -->
           <links>
-            <link>http://docs.oracle.com/javase/7/docs/jdk/api/javadoc/doclet/</link>
+            <link>http://docs.oracle.com/javase/7/docs/jdk/api/javadoc/doclet/
+            </link>
           </links>
 
           <!-- Using itself -->
@@ -59,6 +63,45 @@
               <version>${project.version}</version>
             </tagletArtifact>
           </tagletArtifacts>
+        </configuration>
+      </plugin>
+
+      <!-- Uploading Javadocs to GitHub -->
+      <plugin>
+        <groupId>com.github.github</groupId>
+        <artifactId>site-maven-plugin</artifactId>
+        <version>0.9</version>
+        <configuration>
+          <message>Creating site for ${project.version}</message>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>site</goal>
+            </goals>
+            <!-- select the Maven phase in which the plugin will be executed -->
+            <phase>site-deploy</phase>
+            <configuration>
+              <!-- The commit message -->
+              <message>Docs for ${project.artifactId}:${project.version}</message>
+
+              <!-- The location where the site is uploaded -->
+              <path>${project.version}</path>
+
+              <!-- Use merge to override the content -->
+              <merge>true</merge>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Needs to be disabled for the GitHub Site plugin to work -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>3.3</version>
+        <configuration>
+          <skipDeploy>true</skipDeploy>
         </configuration>
       </plugin>
     </plugins>
