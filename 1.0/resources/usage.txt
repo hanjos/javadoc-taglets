@@ -1,0 +1,6 @@
+/**
+ * Something like this: {@include.file #cs:utf-8 resources/usage.txt}
+ *
+ * As seen below, HTML is escaped:
+ * <script>alert("STOP! Hammer time!");</script>
+ */
