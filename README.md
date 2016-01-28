@@ -15,6 +15,3 @@ For now, the only taglet is `include.file`, which inserts the text content of a 
  * <...>
  */
 ```
-
-### Docs ###
-* [1.0](http://hanjos.github.io/javadoc-taglets/1.0/)
