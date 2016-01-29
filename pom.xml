@@ -49,9 +49,6 @@
           </execution>
         </executions>
         <configuration>
-          <!-- for publish-scm to publish the desired structure -->
-          <outputDirectory>${project.build.directory}/apidocs/docs/${project.version}</outputDirectory>
-          <reportOutputDirectory>${project.reporting.outputDirectory}/apidocs/docs/${project.version}</reportOutputDirectory>
           <detectJavaApiLink>true</detectJavaApiLink>
           <detectLinks>true</detectLinks>
           <detectOfflineLinks>true</detectOfflineLinks>
@@ -90,26 +87,14 @@
           </execution>
         </executions>
         <configuration>
-          <checkoutDirectory>${project.build.directory}/scmpublish
-          </checkoutDirectory>
           <checkinComment>Publishing javadoc for
             ${project.artifactId}:${project.version}
           </checkinComment>
-          <content>${project.reporting.outputDirectory}/apidocs</content>
+          <content>${project.build.directory}/apidocs</content>
           <skipDeletedFiles>true</skipDeletedFiles>
           <serverId>github</serverId>
           <pubScmUrl>scm:git:https://github.com/hanjos/javadoc-taglets.git</pubScmUrl>
           <scmBranch>gh-pages</scmBranch> <!-- branch with static site -->
-        </configuration>
-      </plugin>
-
-      <!-- Needs to be disabled for the GitHub Site plugin to work -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-site-plugin</artifactId>
-        <version>3.3</version>
-        <configuration>
-          <skipDeploy>true</skipDeploy>
         </configuration>
       </plugin>
     </plugins>
